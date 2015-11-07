@@ -1,0 +1,8 @@
+from cmislib import CmisClient, Repository, Folder
+
+client = CmisClient('http://cmis.alfresco.com/cmisatom', 'admin', 'admin')
+
+repo = client.defaultRepository
+
+print repo.id
+

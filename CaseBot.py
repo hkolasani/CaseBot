@@ -25,11 +25,11 @@ def hello_world():
       raise
     else:
         if token != theToken:
-            print 'Invalid Token in the Request'
+            return '{"text":"Invalid Token in the Request"}'
         else :
-            postToSlack(channelId)
+            postToSlack(channelName)
     finally:
-        return '{"text":"RepoId from pyCharm to "' + repo + channelName + '"}!'
+        return '{"text":"RepoId from pyCharm to "' + repo.id + channelName + '"}!'
 
 def postToSlack(chnl):
 

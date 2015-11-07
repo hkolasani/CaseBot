@@ -1,23 +1,35 @@
 from flask import Flask,request
+from cmislib import CmisClient, Repository, Folder
 import httplib,sys
 
 app = Flask(__name__)
 
+theToken = 'sII3Kx1Kml2sJWgbcFyNCRlh'
+theChannel = ''
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/CaseBot', methods=['GET', 'POST'])
 def hello_world():
 
-    channel = "dfdf"
     try:
-      channel = request.values['channel_name']
+      client = CmisClient('http://cmis.alfresco.com/cmisatom', 'admin', 'admin')
+      repo = client.defaultRepository
+      print repo.id
+
+      channelName = request.values['channel_name']
+      channelId = request.values['channel_id']
+      token = request.values['token']
+      userId = request.values['user_id']
     except:
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
       raise
     else:
-        postToSlack(channel)
+        if token != theToken:
+            print 'Invalid Token in the Request'
+        else :
+            postToSlack(channelId)
     finally:
-        return '{"text":"Hello from pyCharm to "' + channel + '"}!'
+        return '{"text":"RepoId from pyCharm to "' + repo + channelName + '"}!'
 
 def postToSlack(chnl):
 

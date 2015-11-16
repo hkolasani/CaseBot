@@ -33,7 +33,8 @@ def hello_world():
 
 def postToSlack(chnl):
 
-    body = '{"text":"Posting from pyCharm' + chnl + '"}'
+    #body = '{"text":"Posting from pyCharm' + chnl + '"}'
+    body = '{"text":"/testcmd"}'
     conn = httplib.HTTPSConnection("hooks.slack.com")
     conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)
     response = conn.getresponse()

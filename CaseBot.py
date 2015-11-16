@@ -56,7 +56,7 @@ def postToSlack(bodyText,postURL):
     #conn = httplib.HTTPSConnection("hooks.slack.com")
     conn = httplib.HTTPSConnection(postURL)
     #conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)
-    conn.request("POST",body)
+    conn.request("POST",postURL,body)
     response = conn.getresponse()
     conn.close()
     print response.status, response.reason

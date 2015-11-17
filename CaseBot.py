@@ -47,7 +47,7 @@ def hello_world():
 
 def postToSlack(bodyText,postURL):
 
-    body = '{"response_type": "in_channel","text":"' + bodyText + '"}'
+    body = '{"response_type": "in_channel","text":"' + bodyText + postURL +  '"}'
     #body = '{"text":"<http://www.google.com>"}'
     conn = httplib.HTTPSConnection("hooks.slack.com")
     #conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)

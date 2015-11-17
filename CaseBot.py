@@ -27,6 +27,7 @@ def hello_world():
             docs.append(doc)
             postText = postText + cmisdoc.id + '\n'
 
+
       #print jsonify(results=docs)
 
       responseURL = request.values['response_url']    #this comes with the outgoing command

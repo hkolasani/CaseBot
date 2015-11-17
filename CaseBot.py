@@ -10,9 +10,8 @@ theChannel = ''
 @app.route('/CaseBot', methods=['GET', 'POST'])
 def hello_world():
 
-    docs = []
-    postText = ""
-    responseURL = ""
+    attachmentsDict = {}
+    attachments = []
 
     try:
       client = CmisClient('http://cmis.alfresco.com/cmisatom', 'admin', 'admin')
@@ -22,13 +21,15 @@ def hello_world():
       cmisdocs = repo.query("select * from cmis:document where cmis:name LIKE '%Hari%'")
       for cmisdoc in cmisdocs:
             print cmisdoc.name
-            doc = {}
-            doc['title'] = cmisdoc.name
-            docs.append(doc)
-            postText = postText + cmisdoc.id + '\n'
+            attachment = {}
+            attachment['title'] = cmisdoc.name
+            attachment['text'] = cmisdoc.id
+            attachment['title_link'] = cmisdoc.id
+            attachments.append(attachment)
 
+      attachmentsDict['attachments'] = attachments
 
-      #print jsonify(results=docs)
+      postText =  jsonify(results=attachmentsDict)
 
       responseURL = request.values['response_url']    #this comes with the outgoing command
       channelName = request.values['channel_name']
@@ -47,7 +48,33 @@ def hello_world():
             postToSlack(postText,responseURL)
             return Response(status=200)
 
+
 def postToSlack(bodyText,postURL):
+
+    salckcommandURL = 'https://hooks.slack.com/commands'
+
+    if postURL.index(salckcommandURL) < 0:
+        return
+
+    salckcommandURI = postURL[len(salckcommandURL) +  1:len(postURL) - 1]
+
+    #body = '{"text":"<http://www.google.com>"}'
+    conn = httplib.HTTPSConnection("hooks.slack.com")
+    #conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)  #to an incming web hook
+
+    fullURL = salckcommandURL + '/' + salckcommandURI
+
+    #responsetype: inchannel is to post back to the channel instead of just the user
+    body = '{"response_type": "in_channel","text":"' + bodyText + fullURL +  '"}'
+
+    conn.request("POST",fullURL,body)
+    response = conn.getresponse()
+    conn.close()
+    print response.status, response.reason
+
+    return
+
+def postToSlack1(bodyText,postURL):
 
     salckcommandURL = 'https://hooks.slack.com/commands'
 

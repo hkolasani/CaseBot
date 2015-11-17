@@ -37,24 +37,19 @@ def hello_world():
     except:
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
-      raise
+      return Response(status=500)
     else:
         if token != theToken:
             return '{"text":"Invalid Token in the Request"}'
         else :
             postToSlack(postText,responseURL)
-    finally:
-        #return '{"text":"RepoId from pyCharm to "' + repo.id + channelName + '"}!'
-        #print json.dumps(docs)
-        #return jsonify(results=docs)
-        return Response(status=200)
+            return Response(status=200)
 
 def postToSlack(bodyText,postURL):
 
     body = '{"text":"' + bodyText + '"}'
     #body = '{"text":"<http://www.google.com>"}'
-    #conn = httplib.HTTPSConnection("hooks.slack.com")
-    conn = httplib.HTTPSConnection(postURL)
+    conn = httplib.HTTPSConnection("hooks.slack.com")
     #conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)
     conn.request("POST",postURL,body)
     response = conn.getresponse()

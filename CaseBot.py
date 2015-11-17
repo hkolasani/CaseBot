@@ -52,7 +52,7 @@ def postToSlack(bodyText,postURL):
     if postURL.index(salckcommandURL) < 0:
         return
 
-    salckcommandURI = postURL[len(salckcommandURL) - 1:len(postURL) - 1]
+    salckcommandURI = postURL[len(salckcommandURL) +  1:len(postURL) - 1]
 
     #body = '{"text":"<http://www.google.com>"}'
     conn = httplib.HTTPSConnection("hooks.slack.com")

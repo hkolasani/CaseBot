@@ -25,10 +25,11 @@ def hello_world():
             doc = {}
             doc['title'] = cmisdoc.name
             docs.append(doc)
-            postText = postText + cmisdoc.name + '\n'
+            postText = postText + cmisdoc.id + '\n'
 
-      print jsonify(results=docs)
-      responseURL = request.values['response_url']
+      #print jsonify(results=docs)
+
+      responseURL = request.values['response_url']    #this comes with the outgoing command
       channelName = request.values['channel_name']
       channelId = request.values['channel_id']
       token = request.values['token']
@@ -56,10 +57,11 @@ def postToSlack(bodyText,postURL):
 
     #body = '{"text":"<http://www.google.com>"}'
     conn = httplib.HTTPSConnection("hooks.slack.com")
-    #conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)  //to an incming web hook
+    #conn.request("POST", "/services/T0DMM2G9H/B0DQK99SM/5NWo2oxIn3l4SXoD2seyDBqu",body)  #to an incming web hook
 
     fullURL = salckcommandURL + '/' + salckcommandURI
 
+    #responsetype: inchannel is to post back to the channel instead of just the user
     body = '{"response_type": "in_channel","text":"' + bodyText + fullURL +  '"}'
 
     conn.request("POST",fullURL,body)

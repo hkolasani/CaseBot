@@ -1,6 +1,7 @@
 from flask import Flask,request,jsonify,Response
 from cmislib import CmisClient, Repository, Folder
 import httplib,sys,json
+import random
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ def hello_world():
             attachment['title'] = cmisdoc.name
             attachment['text'] = cmisdoc.id
             attachment['title_link'] = cmisdoc.id
+            attachment['color'] = generateColor()
             attachments.append(attachment)
 
       attachmentsDict['attachments'] = attachments
@@ -102,6 +104,10 @@ def postToSlack1(bodyText,postURL):
     print response.status, response.reason
 
     return
+
+def generateColor():
+    color = '#{:02x}{:02x}{:02x}'.format(*map(lambda x: random.randint(0, 255), range(3)))
+    return color
 
 if __name__ == '__main__':
     app.run()

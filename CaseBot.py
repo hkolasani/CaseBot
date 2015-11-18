@@ -25,7 +25,7 @@ def hello_world():
 
             print cmisdoc.name
 
-            props = [{"title":"Author","value":"jhgjgj","short":True},{"title":"Date Created","value":"3 Days Ago","short":True}]
+            props = [{"title":"Author","value":"jhgjgj"},{"title":"Date Created","value":"3 Days Ago"}]
 
             attachment = {"title":cmisdoc.name,"text":cmisdoc.id,"title_link":cmisdoc.id,"color":generateColor(),"fields":props}
 

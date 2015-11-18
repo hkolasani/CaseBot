@@ -20,14 +20,17 @@ def hello_world():
       print repo.id
 
       cmisdocs = repo.query("select * from cmis:document where cmis:name LIKE '%Hari%'")
+
       for cmisdoc in cmisdocs:
+
             print cmisdoc.name
-            attachment = {}
-            attachment['title'] = cmisdoc.name
-            attachment['text'] = cmisdoc.id
-            attachment['title_link'] = cmisdoc.id
-            attachment['color'] = generateColor()
+
+            props = [{"title":"Author","value":"jhgjgj","short":True},{"title":"Date Created","value":"3 Days Ago","short":True}]
+
+            attachment = {"title":cmisdoc.name,"text":cmisdoc.id,"title_link":cmisdoc.id,"color":generateColor()}
+
             attachments.append(attachment)
+
 
       attachmentsDict['attachments'] = attachments
 

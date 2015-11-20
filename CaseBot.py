@@ -34,6 +34,8 @@ def hello_world():
 
       print postText
 
+      comamndArgument = request.values['text']
+
       responseURL = request.values['response_url']    #this comes with the outgoing command
       channelName = request.values['channel_name']
       channelId = request.values['channel_id']
@@ -48,7 +50,7 @@ def hello_world():
         if token != theToken:
             return '{"text":"Invalid Token in the Request"}'
         else :
-            postToSlack(postText,responseURL)
+            postToSlack(comamndArgument,responseURL)
             return Response(status=200)
 
 
@@ -68,8 +70,10 @@ def postToSlack(bodyText,postURL):
     fullURL = salckcommandURL + '/' + salckcommandURI
 
     #responsetype: inchannel is to post back to the channel instead of just the user
-    #body = '{"response_type": "in_channel","text":"' + bodyText + fullURL +  '"}'
-    body = '{"response_type": "in_channel","attachments":' + bodyText  + '}'
+    body = '{"response_type": "in_channel","text":"' + bodyText + fullURL +  '"}'
+
+    #sending atatchements
+    #body = '{"response_type": "in_channel","attachments":' + bodyText  + '}'
 
     conn.request("POST",fullURL,body)
     response = conn.getresponse()

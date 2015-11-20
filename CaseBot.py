@@ -50,7 +50,7 @@ def hello_world():
         if token != theToken:
             return '{"text":"Invalid Token in the Request"}'
         else :
-            postToSlack(comamndArgument,responseURL)
+            postToSlack(postText,responseURL)
             return Response(status=200)
 
 

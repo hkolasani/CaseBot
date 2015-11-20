@@ -70,10 +70,10 @@ def postToSlack(bodyText,postURL):
     fullURL = salckcommandURL + '/' + salckcommandURI
 
     #responsetype: inchannel is to post back to the channel instead of just the user
-    body = '{"response_type": "in_channel","text":"' + bodyText + fullURL +  '"}'
+    #body = '{"response_type": "in_channel","text":"' + bodyText + fullURL +  '"}'
 
     #sending atatchements
-    #body = '{"response_type": "in_channel","attachments":' + bodyText  + '}'
+    body = '{"response_type": "in_channel","attachments":' + bodyText  + '}'
 
     conn.request("POST",fullURL,body)
     response = conn.getresponse()

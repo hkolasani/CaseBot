@@ -58,13 +58,14 @@ def getDocs(caseNumber):
 
     attachmentsDict['attachments'] = attachments
 
-    postText = json.dumps(attachmentsDict)
+    postText = json.dumps(attachments)
+    postText = '"attachments":' + postText
+
     responseURL = request.values['response_url']
 
     postToSlack(postText,responseURL)
 
     return Response(status=200)
-
 
 def postToSlack(bodyText,postURL):
 

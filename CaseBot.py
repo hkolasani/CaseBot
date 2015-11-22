@@ -57,17 +57,17 @@ def getDocs(caseNumber):
         attachments.append(attachment)
 
     attachmentsDict['attachments'] = attachments
-
     postText = json.dumps(attachments)
-    postText = '"attachments":' + postText
+
+    body = '{"response_type": "in_channel","attachments":' + postText  + '}'
 
     responseURL = request.values['response_url']
 
-    postToSlack(postText,responseURL)
+    postToSlack(body,responseURL)
 
     return Response(status=200)
 
-def postToSlack(bodyText,postURL):
+def postToSlack(body,postURL):
 
     salckcommandURL = 'https://hooks.slack.com/commands'
 
@@ -79,8 +79,6 @@ def postToSlack(bodyText,postURL):
     conn = httplib.HTTPSConnection("hooks.slack.com")
 
     fullURL = salckcommandURL + '/' + salckcommandURI
-
-    body = '{"response_type": "in_channel","' + bodyText  + '}'
 
     conn.request("POST",fullURL,body)
     response = conn.getresponse()

@@ -37,6 +37,8 @@ def doPost():
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
       return Response(status=500)
+    else:
+        return Response(status=200)
 
 def getDocs(caseNumber):
 
@@ -63,11 +65,6 @@ def getDocs(caseNumber):
 
     postToSlack(body,responseURL)
 
-    return Response(status=200)
-
-def getInfo(caseNumber):
-    return
-
 def getInfo(caseNumber):
     return
 
@@ -90,7 +87,6 @@ def postToSlack(body,postURL):
     conn.request("POST",fullURL,body)
     response = conn.getresponse()
     conn.close()
-    print response.status, response.reason
 
     return
 

@@ -29,12 +29,10 @@ def doPost():
 
             if action == "docs":
                 getDocs(caseNumber)
-            elif action == "docs":
-                getDocs(caseNumber)
-            elif action == "docs":
-                getDocs(caseNumber)
-            elif action == "docs":
-                getDocs(caseNumber)
+            elif action == "info":
+                getInfo(caseNumber)
+            else:
+                moveToChannel(caseNumber)
     except:
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
@@ -66,6 +64,15 @@ def getDocs(caseNumber):
     postToSlack(body,responseURL)
 
     return Response(status=200)
+
+def getInfo(caseNumber):
+    return
+
+def getInfo(caseNumber):
+    return
+
+def moveToChannel(caseNumber,channelName):
+    return
 
 def postToSlack(body,postURL):
 

@@ -5,6 +5,7 @@ import random
 
 app = Flask(__name__)
 
+incomingHooks = {"hold","https://hooks.slack.com/services/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"}
 slackToken = 'sII3Kx1Kml2sJWgbcFyNCRlh'
 theChannel = ''
 
@@ -15,6 +16,8 @@ def doPost():
         token = request.values['token']
         if token != slackToken:
             return '{"text":"Error: Invalid Token!"}'
+
+        fromChannel = request.values['channel_name']
 
         cmdArg = request.values['text']
         if cmdArg == None:
@@ -32,7 +35,8 @@ def doPost():
             elif action == "info":
                 getInfo(caseNumber)
             else:
-                moveToChannel(caseNumber)
+                toChannel = action
+                move(caseNumber,fromChannel,toChannel)
     except:
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
@@ -63,28 +67,36 @@ def getDocs(caseNumber):
 
     responseURL = request.values['response_url']
 
-    postToSlack(body,responseURL)
+    postURL = getCommandURL(responseURL)
+
+    postToSlack(body,postURL)
 
 def getInfo(caseNumber):
     return
 
-def moveToChannel(caseNumber,channelName):
+def move(caseNumber,fromChannel,toChannel):
+
+    postURL = incomingHooks[toChannel]
+    body = '{"text:":"Moved from'  + fromChannel + '"}'
+
+    postToSlack(body,postURL)
+
     return
 
-def postToSlack(body,postURL):
-
+def getCommandURL(responseURL):
     salckcommandURL = 'https://hooks.slack.com/commands'
 
-    if postURL.index(salckcommandURL) < 0:
+    if responseURL.index(salckcommandURL) < 0:
         return
 
-    salckcommandURI = postURL[len(salckcommandURL) +  1:len(postURL) - 1]
-
-    conn = httplib.HTTPSConnection("hooks.slack.com")
-
+    salckcommandURI = responseURL[len(salckcommandURL) +  1:len(responseURL) - 1]
     fullURL = salckcommandURL + '/' + salckcommandURI
 
-    conn.request("POST",fullURL,body)
+    return fullURL
+
+def postToSlack(body,postURL):
+    conn = httplib.HTTPSConnection("hooks.slack.com")
+    conn.request("POST",postURL,body)
     response = conn.getresponse()
     conn.close()
 

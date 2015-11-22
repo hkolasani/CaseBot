@@ -38,16 +38,13 @@ def doPost():
             else:
                 toChannel = action
                 move(caseNumber,fromChannel,toChannel)
-                responseText =  '{"text":"Posted to ' + toChannel + '"}'
     except:
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
       return Response(status=500)
     else:
-        if len(responseText) == 0:
-            return Response(status=200)
-        else:
-            return responseText
+      return Response(status=200)
+
 
 def getDocs(caseNumber):
 
@@ -81,9 +78,16 @@ def getInfo(caseNumber):
 
 def move(caseNumber,fromChannel,toChannel):
 
+    #post to toChannel
     hooks = incomingHooks
-    postURL = hooks[toChannel]
+    toChannelURL = hooks[toChannel]
     body = '{"text:":"Moved from'  + fromChannel + '"}'
+    postToSlack(body,toChannelURL)
+
+    #now post the response back to the fromChannel
+    body = '{"response_type": "in_channel","text":"Case ' + caseNumber + 'Posted to ' + toChannel  + '}'
+    responseURL = request.values['response_url']
+    postURL = getCommandURL(responseURL)
 
     postToSlack(body,postURL)
 

@@ -50,9 +50,9 @@ def getDocs(caseNumber):
     attachmentsDict = {}
     attachments = []
 
+    #query CMS
     client = CmisClient('http://cmis.alfresco.com/cmisatom', 'admin', 'admin')
     repo = client.defaultRepository
-
     cmisdocs = repo.query("select * from cmis:document where cmis:name LIKE '%Hari%'")
 
     for cmisdoc in cmisdocs:
@@ -63,11 +63,8 @@ def getDocs(caseNumber):
 
     attachmentsDict['attachments'] = attachments
     postText = json.dumps(attachments)
-
     body = '{"response_type": "in_channel","attachments":' + postText  + '}'
-
     responseURL = request.values['response_url']
-
     postURL = getCommandURL(responseURL)
 
     postToSlack(body,postURL)
@@ -81,7 +78,7 @@ def move(caseNumber,fromChannel,toChannel):
     postToSlack(body,toChannelURL)
 
     #now post the response back to the fromChannel
-    body = '{"response_type": "in_channel","text":"Case ' + caseNumber + 'Posted to ' + toChannel  + '"}'
+    body = '{"response_type": "in_channel","text":"Case ' + caseNumber + ' Posted to #' + toChannel  + '"}'
     responseURL = request.values['response_url']
     postURL = getCommandURL(responseURL)
 

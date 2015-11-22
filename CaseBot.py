@@ -32,7 +32,6 @@ def doPost():
 
             if action == "docs":
                 getDocs(caseNumber)
-                responseText = ""
             elif action == "info":
                 getInfo(caseNumber)
             else:
@@ -73,9 +72,6 @@ def getDocs(caseNumber):
 
     postToSlack(body,postURL)
 
-def getInfo(caseNumber):
-    return
-
 def move(caseNumber,fromChannel,toChannel):
 
     #post to toChannel
@@ -85,12 +81,15 @@ def move(caseNumber,fromChannel,toChannel):
     postToSlack(body,toChannelURL)
 
     #now post the response back to the fromChannel
-    body = '{"response_type": "in_channel","text":"Case ' + caseNumber + 'Posted to ' + toChannel  + '}'
+    body = '{"response_type": "in_channel","text":"Case ' + caseNumber + 'Posted to ' + toChannel  + '"}'
     responseURL = request.values['response_url']
     postURL = getCommandURL(responseURL)
 
     postToSlack(body,postURL)
 
+    return
+
+def getInfo(caseNumber):
     return
 
 def getCommandURL(responseURL):

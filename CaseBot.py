@@ -5,7 +5,7 @@ import random
 
 app = Flask(__name__)
 
-incomingHooks = {"hold","https://hooks.slack.com/services/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"}
+incomingHooks = {"hold":"https://hooks.slack.com/services/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"}
 slackToken = 'sII3Kx1Kml2sJWgbcFyNCRlh'
 theChannel = ''
 
@@ -32,17 +32,22 @@ def doPost():
 
             if action == "docs":
                 getDocs(caseNumber)
+                responseText = ""
             elif action == "info":
                 getInfo(caseNumber)
             else:
                 toChannel = action
                 move(caseNumber,fromChannel,toChannel)
+                responseText =  '{"text":"Posted to ' + toChannel + '"}'
     except:
       print "Unexpected error:", sys.exc_info()[0]
       e = sys.exc_info()[0]
       return Response(status=500)
     else:
-        return Response(status=200)
+        if len(responseText) == 0:
+            return Response(status=200)
+        else:
+            return responseText
 
 def getDocs(caseNumber):
 
@@ -76,7 +81,8 @@ def getInfo(caseNumber):
 
 def move(caseNumber,fromChannel,toChannel):
 
-    postURL = incomingHooks[toChannel]
+    hooks = incomingHooks
+    postURL = hooks[toChannel]
     body = '{"text:":"Moved from'  + fromChannel + '"}'
 
     postToSlack(body,postURL)
@@ -96,6 +102,7 @@ def getCommandURL(responseURL):
 
 def postToSlack(body,postURL):
     conn = httplib.HTTPSConnection("hooks.slack.com")
+
     conn.request("POST",postURL,body)
     response = conn.getresponse()
     conn.close()

@@ -74,7 +74,7 @@ def move(caseNumber,fromChannel,toChannel):
     #post to toChannel
     hooks = incomingHooks
     toChannelURL = hooks[toChannel]
-    body = '{"text":"Moved from #'  + fromChannel + '"}'
+    body = bulidTextBody("Moved from #"  + fromChannel)
     postToSlack(body,toChannelURL)
 
     #now post the response back to the fromChannel
@@ -109,6 +109,9 @@ def postToSlack(body,postURL):
 
 def createNewCase(reqeust):
     return
+
+def bulidTextBody(textString):
+     return '{"text":"' + textString + '"}'
 
 def generateColor():
     color = '#{:02x}{:02x}{:02x}'.format(*map(lambda x: random.randint(0, 255), range(3)))

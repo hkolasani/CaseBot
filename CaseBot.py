@@ -5,7 +5,7 @@ import random
 
 app = Flask(__name__)
 
-incomingHooks = {"hold":"https://hooks.slack.com/services/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"}
+incomingHooks = {"hold":"https://hooks.slack.com/services/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"}
 slackToken = 'sII3Kx1Kml2sJWgbcFyNCRlh'
 theChannel = ''
 
@@ -74,14 +74,13 @@ def move(caseNumber,fromChannel,toChannel):
     #post to toChannel
     hooks = incomingHooks
     toChannelURL = hooks[toChannel]
-    body = '{"text:":"Moved from'  + fromChannel + '"}'
-    postToSlack(body,toChannelURL)
+    body = '{"text:":"Moved from #'  + fromChannel + '"}'
+    postToSlack1(body,toChannelURL)
 
     #now post the response back to the fromChannel
     body = '{"response_type": "in_channel","text":"Case ' + caseNumber + ' Posted to #' + toChannel  + '"}'
     responseURL = request.values['response_url']
     postURL = getCommandURL(responseURL)
-
     postToSlack(body,postURL)
 
     return
@@ -102,7 +101,6 @@ def getCommandURL(responseURL):
 
 def postToSlack(body,postURL):
     conn = httplib.HTTPSConnection("hooks.slack.com")
-
     conn.request("POST",postURL,body)
     response = conn.getresponse()
     conn.close()

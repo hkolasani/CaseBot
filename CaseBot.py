@@ -6,6 +6,7 @@ import random
 app = Flask(__name__)
 
 incomingHooks = {"hold":"https://hooks.slack.com/services/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"}
+intakeHook = "https://hooks.slack.com/services/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"
 slackToken = 'sII3Kx1Kml2sJWgbcFyNCRlh'
 theChannel = ''
 
@@ -13,16 +14,16 @@ theChannel = ''
 def doPost():
 
     try:
-        token = request.values['token']
-        if token != slackToken:
-            return '{"text":"Error: Invalid Token!"}'
-
-        fromChannel = request.values['channel_name']
-
-        cmdArg = request.values['text']
-        if cmdArg == None:
-            createNewCase(request)
+        if len(request.values) == 0:
+            createNewCase()
         else:
+            token = request.values['token']
+
+            if token != slackToken:
+                return '{"text":"Error: Invalid Token!"}'
+
+            fromChannel = request.values['channel_name']
+            cmdArg = request.values['text']
             args = cmdArg.split(" ")
             caseNumber = args[0]
             action = args[1]
@@ -71,13 +72,13 @@ def getDocs(caseNumber):
 
 def move(caseNumber,fromChannel,toChannel):
 
-    #post to toChannel
+    #post to the [toChannel]
     hooks = incomingHooks
     toChannelURL = hooks[toChannel]
     body = '{"text":"Case ' + caseNumber + ' Posted from #'  + fromChannel + '"}'
     postToSlack(body,toChannelURL)
 
-    #now post the response back to the fromChannel
+    #now post the response back to the [fromChannel]
     body = '{"response_type": "in_channel","text":"Case ' + caseNumber + ' Posted to #' + toChannel  + '"}'
     responseURL = request.values['response_url']
     postURL = getCommandURL(responseURL)
@@ -107,7 +108,12 @@ def postToSlack(body,postURL):
 
     return
 
-def createNewCase(reqeust):
+def createNewCase():
+     #post to the Intake Channel
+    caseNbr = random.randint(0, 9999)
+    body = '{"text":"New Case ' + str(caseNbr) + '"}'
+    postToSlack(body,intakeHook)
+
     return
 
 def generateColor():

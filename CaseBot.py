@@ -74,7 +74,7 @@ def move(caseNumber,fromChannel,toChannel):
     #post to toChannel
     hooks = incomingHooks
     toChannelURL = hooks[toChannel]
-    body = '{"text:":"Moved from #'  + fromChannel + '"}'
+    body = '{"text":"Moved from #'  + fromChannel + '"}'
     postToSlack(body,toChannelURL)
 
     #now post the response back to the fromChannel

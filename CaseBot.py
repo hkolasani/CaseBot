@@ -87,7 +87,19 @@ def move(caseNumber,fromChannel,toChannel):
     return
 
 def getInfo(caseNumber):
-    return
+    #TODO: query the csae record
+     attachments = []
+     props = [{"title":"Customer Name","value":"Matt Peters","short":True},{"title":"Date Created","value":"3 Days Ago","short":True}]
+     attachment = {"title":"Case " + caseNumber,"color":generateColor(),"fields":props}
+     attachments.append(attachment)
+     postText = json.dumps(attachments)
+     body = '{"response_type": "in_channel","attachments":' + postText  + '}'
+     responseURL = request.values['response_url']
+     postURL = getCommandURL(responseURL)
+
+     postToSlack(body,postURL)
+
+     return
 
 def getCommandURL(responseURL):
     salckcommandURL = 'https://hooks.slack.com/commands'
